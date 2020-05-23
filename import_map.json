@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "servest": "https://servestjs.org/@v1.0.0/mod.ts"
+  }
+}
