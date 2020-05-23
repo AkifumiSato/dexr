@@ -1,7 +1,7 @@
 // @deno-types="https://servestjs.org/@v1.0.0/types/react/index.d.ts";
 import React from 'React'
 import ReactDOMServer from 'ReactDOMServer'
-import { createApp } from 'servest'
+import { Application, Router } from 'oak'
 import App from './App.tsx'
 
 const browserBundlePath = '/browser.js'
@@ -19,25 +19,22 @@ const html =
     </body>
   </html>`
 
-const app = createApp()
-app.handle('/', async (req) => {
-  await req.respond({
-    status: 200,
-    headers: new Headers({
+const router = new Router();
+router
+  .get("/", (context) => {
+    context.response.headers = new Headers({
       'content-type': 'text/html; charset=UTF-8',
-    }),
-    body: html,
+    })
+    context.response.body = html;
   })
-})
-
-app.handle(browserBundlePath, async (req) => {
-  await req.respond({
-    status: 200,
-    headers: new Headers({
+  .get(browserBundlePath, (context) => {
+    context.response.headers = new Headers({
       'content-type': 'application/javascript',
-    }),
-    body: js,
+    })
+    context.response.body = js;
   })
-})
 
-app.listen({ port: 8000 })
+const app = new Application()
+app.use(router.routes());
+
+await app.listen({ port: 8000 })

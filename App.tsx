@@ -1,7 +1,7 @@
-// @deno-types="https://servestjs.org/@v1.0.0/types/react/index.d.ts";
-import React from 'React'
+// @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
+import React from 'https://dev.jspm.io/react@16.13.1'
 
-const App = () => {
+const App: React.FC = () => {
   const [count, setCount] = React.useState(0)
 
   return (
