@@ -1,5 +1,7 @@
 {
   "imports": {
-    "servest": "https://servestjs.org/@v1.0.0/mod.ts"
+    "servest": "https://servestjs.org/@v1.0.0/mod.ts",
+    "React": "https://dev.jspm.io/react@16.13.1",
+    "ReactDOMServer": "https://dev.jspm.io/react-dom@16.13.1/server"
   }
 }
