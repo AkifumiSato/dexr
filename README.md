@@ -1,4 +1,4 @@
 ## command
 ```
-deno run --allow-net --unstable --importmap=import_map.json server.ts
+deno run --allow-net --allow-read --unstable --importmap=import_map.json server.tsx
 ```
