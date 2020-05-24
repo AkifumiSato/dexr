@@ -1,4 +1,4 @@
-// @deno-types="https://servestjs.org/@v1.0.0/types/react/index.d.ts";
+// @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 import React from 'React'
 import ReactDOMServer from 'ReactDOMServer'
 import { Application, Router } from 'oak'
@@ -9,13 +9,13 @@ const js =
   `import React from "https://dev.jspm.io/react@16.13.1";\nimport ReactDOM from "https://dev.jspm.io/react-dom@16.13.1";\nconst App = ${ App };\nReactDOM.hydrate(React.createElement(App), document.body);`
 
 const CustomHead: React.FC = await import('./src/Head.tsx') // custom your head tag
-  .then(HeadModule =>  HeadModule.default)
+  .then(HeadModule => HeadModule.default)
   .catch(e => () => <title>Hello, world</title>) // default title
 
 const html =
   `<html lang="ja">
     <head>
-      ${ReactDOMServer.renderToStaticMarkup(<CustomHead />)}
+      ${ ReactDOMServer.renderToStaticMarkup(<CustomHead />) }
       <script type="module" src="${ browserBundlePath }"></script>
       <style>* { font-family: Helvetica; }</style>
     </head>
@@ -24,23 +24,23 @@ const html =
     </body>
   </html>`
 
-const router = new Router();
+const router = new Router()
 router
-  .get("/", (context) => {
+  .get('/', (context) => {
     context.response.headers = new Headers({
       'content-type': 'text/html; charset=UTF-8',
     })
-    context.response.body = html;
+    context.response.body = html
   })
   .get(browserBundlePath, (context) => {
     context.response.headers = new Headers({
       'content-type': 'application/javascript',
     })
-    context.response.body = js;
+    context.response.body = js
   })
 
 const app = new Application()
-app.use(router.routes());
+app.use(router.routes())
 
 console.log('serve: http://localhost:8000/')
 await app.listen({ port: 8000 })
