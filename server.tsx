@@ -2,7 +2,7 @@
 import React from 'React'
 import ReactDOMServer from 'ReactDOMServer'
 import { Application, Router } from 'oak'
-import App from './App.tsx'
+import App from './src/App.tsx'
 
 const browserBundlePath = '/browser.js'
 const js =
