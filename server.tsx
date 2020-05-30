@@ -19,11 +19,9 @@ const html =
       <style>* { font-family: Helvetica; }</style>
     </head>
     <body>
-      <div id="roto">
-        ${ ReactDOMServer.renderToString(<App />) }
-      </div>
-      <script type="module" src="${ browserBundlePath }"></script>
+      <div id="root">${ ReactDOMServer.renderToString(<App />) }</div>
     </body>
+    <script type="module" src="${ browserBundlePath }"></script>
   </html>`
 
 const router = new Router()
