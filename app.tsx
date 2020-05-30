@@ -1,6 +1,6 @@
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 import React from 'React'
-import ReactDOMServer from 'ReactDOMServer'
+import ReactDOMServer from 'ReactDOM/server'
 import App from './src/App.tsx'
 
 export const browserBundlePath = '/browser.js'
