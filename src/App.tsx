@@ -1,5 +1,5 @@
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
-import React from 'https://dev.jspm.io/react@16.13.1'
+import React from 'React'
 
 const App: React.FC = () => {
   const [count, setCount] = React.useState(0)
