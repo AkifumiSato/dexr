@@ -3,9 +3,9 @@ import React from 'React'
 import ReactDOMServer from 'ReactDOM/server'
 import App from './src/App.tsx'
 
-const CustomHead: React.FC = await import('./src/Head.tsx') // custom your head tag
+const CustomHead: React.FC = await import('./src/Head.tsx')
   .then(HeadModule => HeadModule.default)
-  .catch(e => () => <title>Hello, world</title>) // default title
+  .catch(e => () => <title>Hello, world</title>)
 
 export const html =
   `<html lang="ja">
