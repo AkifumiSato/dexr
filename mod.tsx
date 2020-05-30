@@ -2,7 +2,7 @@ import { parse } from 'https://deno.land/std/flags/mod.ts'
 import { startServer } from './server.ts'
 
 const { args } = Deno
-const { _: [subCommand] } = parse(args)
+const { _: [subCommand = 'dev'] } = parse(args)
 
 switch (subCommand) {
   case 'dev':
