@@ -6,7 +6,7 @@ import App from './src/App.tsx'
 
 const browserBundlePath = '/browser.js'
 const js =
-  `import React from "https://dev.jspm.io/react@16.13.1";\nimport ReactDOM from "https://dev.jspm.io/react-dom@16.13.1";\nconst App = ${ App };\nReactDOM.hydrate(React.createElement(App), document.body);`
+  `import React from "https://dev.jspm.io/react@16.13.1";\nimport ReactDOM from "https://dev.jspm.io/react-dom@16.13.1";\nconst App = ${ App };\nReactDOM.hydrate(React.createElement(App), document.getElementById('root'));`
 
 const CustomHead: React.FC = await import('./src/Head.tsx') // custom your head tag
   .then(HeadModule => HeadModule.default)
@@ -16,11 +16,13 @@ const html =
   `<html lang="ja">
     <head>
       ${ ReactDOMServer.renderToStaticMarkup(<CustomHead />) }
-      <script type="module" src="${ browserBundlePath }"></script>
       <style>* { font-family: Helvetica; }</style>
     </head>
     <body>
-      ${ ReactDOMServer.renderToString(<App />) }
+      <div id="roto">
+        ${ ReactDOMServer.renderToString(<App />) }
+      </div>
+      <script type="module" src="${ browserBundlePath }"></script>
     </body>
   </html>`
 
