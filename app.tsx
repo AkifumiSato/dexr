@@ -3,10 +3,6 @@ import React from 'React'
 import ReactDOMServer from 'ReactDOM/server'
 import App from './src/App.tsx'
 
-export const browserBundlePath = '/browser.js'
-export const js =
-  `import React from "https://dev.jspm.io/react@16.13.1";\nimport ReactDOM from "https://dev.jspm.io/react-dom@16.13.1";\nconst App = ${ App };\nReactDOM.hydrate(React.createElement(App), document.getElementById('root'));`
-
 const CustomHead: React.FC = await import('./src/Head.tsx') // custom your head tag
   .then(HeadModule => HeadModule.default)
   .catch(e => () => <title>Hello, world</title>) // default title
@@ -20,5 +16,10 @@ export const html =
     <body>
       <div id="root">${ ReactDOMServer.renderToString(<App />) }</div>
     </body>
-    <script type="module" src="${ browserBundlePath }"></script>
+    <script type="module">
+      import React from 'https://dev.jspm.io/react@16.13.1'
+      import ReactDOM from 'https://dev.jspm.io/react-dom@16.13.1'
+      const App = ${ App }
+      ReactDOM.hydrate(React.createElement(App), document.getElementById('root'))
+    </script>
   </html>`
