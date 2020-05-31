@@ -11,5 +11,11 @@
       "unstable": true,
       "importmap": "import_map.json"
     }
+  },
+  "watcher": {
+    "interval": 350,
+    "exts": ["js", "jsx", "ts", "tsx", "json"],
+    "skip": ["*/.git/*"],
+    "legacy": false
   }
 }
