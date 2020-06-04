@@ -1,8 +1,10 @@
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
-import React from 'React'
+import React from 'https://dev.jspm.io/react@16.13.1'
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
-import { Application, Router } from 'oak'
+import { Application, Router } from 'https://deno.land/x/oak@v4.0.0/mod.ts'
 import { renderHtml } from './app.tsx'
+
+export { React }
 
 type Option = {
   port?: number

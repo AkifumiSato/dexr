@@ -1,6 +1,6 @@
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
-import React from 'React'
-import ReactDOMServer from 'ReactDOM/server'
+import React from 'https://dev.jspm.io/react@16.13.1'
+import ReactDOMServer from 'https://dev.jspm.io/react-dom@16.13.1/server'
 
 const CustomHead: React.FC = await import('./src/Head.tsx')
   .then(HeadModule => HeadModule.default)
