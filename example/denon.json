@@ -2,14 +2,14 @@
   "$schema": "https://deno.land/x/denon/schema.json",
   "scripts": {
     "start": {
-      "cmd": "deno run mod.ts",
+      "cmd": "deno run ../mod.ts",
       "desc": "Run the dev server.",
       "allow": [
         "net",
         "read"
       ],
       "unstable": true,
-      "importmap": "import_map.json"
+      "importmap": "../import_map.json"
     }
   },
   "watcher": {
