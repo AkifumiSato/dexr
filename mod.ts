@@ -10,7 +10,7 @@ type Option = {
   port?: number
 }
 
-export class Dexr {
+class DexrApp {
   #router: Router
   #isStart: boolean = false
   #head?: React.FC
@@ -62,3 +62,5 @@ export class Dexr {
     console.log('serve: http://localhost:8000/')
   }
 }
+
+export const createDexr = () => new DexrApp()

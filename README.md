@@ -1,9 +1,14 @@
 # Dexr
-React SSR application framework.
+Small application framework on the React.
 
 ## env
 deno: v1.0.3
+
 denon: v2.0.2
+
+## dependencies
+* React
+* oak
 
 ## command
 ### run dev
