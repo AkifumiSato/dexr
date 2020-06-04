@@ -14,7 +14,7 @@ Small application framework on the React.
 deno
 ```
 cd example
-deno run --allow-net --allow-read mod.tsx
+deno run --allow-net --allow-read server.tsx
 ```
 
 denon
