@@ -2,7 +2,7 @@
 import React from 'https://dev.jspm.io/react@16.13.1'
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 import { Application, Router } from 'https://deno.land/x/oak@v4.0.0/mod.ts'
-import { renderHtml } from './app.tsx'
+import { createLayout, Layout, renderHtml } from './layout.tsx'
 
 export { React }
 
@@ -13,18 +13,19 @@ type Option = {
 class DexrApp {
   #router: Router
   #isStart: boolean = false
-  #head?: React.FC
+  #layout: Layout
 
   constructor() {
     this.#router = new Router()
+    this.#layout = createLayout()
   }
 
   /**
-   * Register head contents.
-   * If not specified, returns the value.
+   * Register Layout with given layout.
    **/
-  addHead(Head: React.FC): this {
-    this.#head = Head
+  useLayout(layout: Layout): this {
+    this.#layout = layout
+
     return this
   }
 
@@ -33,13 +34,11 @@ class DexrApp {
    * It will response with render html embed App Component.
    **/
   addPage(route: string, App: React.FC): this {
-    const Head = this.#head
-
     this.#router.get(route, (context) => {
       context.response.headers = new Headers({
         'content-type': 'text/html; charset=UTF-8',
       })
-      context.response.body = renderHtml({ App, Head })
+      context.response.body = renderHtml({ App, layout: this.#layout })
     })
     return this
   }

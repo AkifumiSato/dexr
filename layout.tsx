@@ -5,12 +5,14 @@ import ReactDOMServer from 'https://dev.jspm.io/react-dom@16.13.1/server'
 const DefaultHead: React.FC = () => <title>Hello, world</title>
 
 type Components = {
-  Head?: React.FC
+  layout: Layout
   App: React.FC
 }
 
-export const renderHtml = ({ Head = DefaultHead, App }: Components) =>
-  `<html lang="ja">
+export const renderHtml = ({ layout, App }: Components) => {
+  const Head = layout.head
+
+  return `<html lang="ja">
     <head>
       ${ ReactDOMServer.renderToStaticMarkup(<Head />) }
       <style>* { font-family: Helvetica; }</style>
@@ -25,3 +27,19 @@ export const renderHtml = ({ Head = DefaultHead, App }: Components) =>
       ReactDOM.hydrate(React.createElement(App), document.getElementById('root'))
     </script>
   </html>`
+}
+
+export class Layout {
+  head: React.FC = DefaultHead
+
+  /**
+   * Register head contents.
+   * If not specified, returns the value.
+   **/
+  addHead(Head: React.FC): this {
+    this.head = Head
+    return this
+  }
+}
+
+export const createLayout = () => new Layout()
