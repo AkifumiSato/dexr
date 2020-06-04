@@ -1,3 +1,6 @@
+# Dexr
+React SSR application framework.
+
 ## env
 deno: v1.0.3
 denon: v2.0.2

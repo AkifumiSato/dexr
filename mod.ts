@@ -13,9 +13,19 @@ type Option = {
 export class Dexr {
   #router: Router
   #isStart: boolean = false
+  #head?: React.FC
 
   constructor() {
     this.#router = new Router()
+  }
+
+  /**
+   * Register head contents.
+   * If not specified, returns the value.
+   **/
+  addHead(Head: React.FC): this {
+    this.#head = Head
+    return this
   }
 
   /**
@@ -23,11 +33,13 @@ export class Dexr {
    * It will response with render html embed App Component.
    **/
   addPage(route: string, App: React.FC): this {
+    const Head = this.#head
+
     this.#router.get(route, (context) => {
       context.response.headers = new Headers({
         'content-type': 'text/html; charset=UTF-8',
       })
-      context.response.body = renderHtml(App)
+      context.response.body = renderHtml({ App, Head })
     })
     return this
   }

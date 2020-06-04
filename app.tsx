@@ -2,14 +2,17 @@
 import React from 'https://dev.jspm.io/react@16.13.1'
 import ReactDOMServer from 'https://dev.jspm.io/react-dom@16.13.1/server'
 
-const CustomHead: React.FC = await import('./src/Head.tsx')
-  .then(HeadModule => HeadModule.default)
-  .catch(e => () => <title>Hello, world</title>)
+const DefaultHead: React.FC = () => <title>Hello, world</title>
 
-export const renderHtml = (App: React.FC) =>
+type Components = {
+  Head?: React.FC
+  App: React.FC
+}
+
+export const renderHtml = ({ Head = DefaultHead, App }: Components) =>
   `<html lang="ja">
     <head>
-      ${ ReactDOMServer.renderToStaticMarkup(<CustomHead />) }
+      ${ ReactDOMServer.renderToStaticMarkup(<Head />) }
       <style>* { font-family: Helvetica; }</style>
     </head>
     <body>
