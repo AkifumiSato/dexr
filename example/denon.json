@@ -2,7 +2,7 @@
   "$schema": "https://deno.land/x/denon/schema.json",
   "scripts": {
     "start": {
-      "cmd": "deno run ../mod.ts",
+      "cmd": "deno run server.ts",
       "desc": "Run the dev server.",
       "allow": [
         "net",

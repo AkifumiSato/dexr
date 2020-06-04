@@ -1,13 +1,12 @@
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 import React from 'React'
 import ReactDOMServer from 'ReactDOM/server'
-import App from './example/App.tsx'
 
 const CustomHead: React.FC = await import('./src/Head.tsx')
   .then(HeadModule => HeadModule.default)
   .catch(e => () => <title>Hello, world</title>)
 
-export const html =
+export const renderHtml = (App: React.FC) =>
   `<html lang="ja">
     <head>
       ${ ReactDOMServer.renderToStaticMarkup(<CustomHead />) }
