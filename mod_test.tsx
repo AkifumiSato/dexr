@@ -1,10 +1,10 @@
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 import React from 'https://dev.jspm.io/react@16.13.1'
 import { assertEquals, assertStrictEq } from 'https://deno.land/std@0.55.0/testing/asserts.ts'
-import { spy, Spy } from 'https://raw.githubusercontent.com/udibo/mock/v0.3.0/spy.ts'
+import { spy } from 'https://raw.githubusercontent.com/udibo/mock/v0.3.0/spy.ts'
 import { Layout, renderComponents } from './layout.tsx'
 import { DexrApp } from './mod.ts'
-import { Router } from 'https://deno.land/x/oak@v4.0.0/router.ts'
+import { Router } from 'https://deno.land/x/oak@v5.1.0/router.ts'
 
 type Context = {
   response: {
@@ -29,7 +29,7 @@ class RenderHtmlStack {
 Deno.test('useLayout, addPage logic', () => {
   const renderHtmlStack = new RenderHtmlStack()
   const router = new Router()
-  const routerGetSpy = spy(router, 'get')
+  const spyRouterGet = spy(router, 'get')
   const dummyLayout = new Layout()
 
   const dexr = new DexrApp({
@@ -40,9 +40,9 @@ Deno.test('useLayout, addPage logic', () => {
     .useLayout(dummyLayout)
     .addPage('test', () => <p>App</p>)
 
-  assertEquals(routerGetSpy.calls.length, 1)
+  assertEquals(spyRouterGet.calls.length, 1)
 
-  const { args, self } = routerGetSpy.calls[0]
+  const { args, self } = spyRouterGet.calls[0]
   assertEquals(self, router)
 
   const [route, handler] = args
@@ -55,5 +55,23 @@ Deno.test('useLayout, addPage logic', () => {
   assertEquals(dummyContext.response.body, renderHtmlStack.dummyResult)
   assertStrictEq(renderHtmlStack.lastUseLayout, dummyLayout)
 
-  routerGetSpy.restore()
+  spyRouterGet.restore()
 })
+
+// issue https://github.com/oakserver/oak/issues/153
+//
+// Deno.test('run logic', async () => {
+//   const application = new Application()
+//   const router = new Router()
+//   // const spyUse = spy(application, 'use')
+//   const spyListen = spy(application, 'listen')
+//
+//   // const dexr = new DexrApp({ application, router })
+//   const dexr = new DexrApp({ application, router })
+//   await dexr.run()
+//
+//   assertEquals(spyListen.calls.length, 1)
+//   assertEquals(spyListen.calls[0].args[0], {
+//     port: 8000,
+//   })
+// })

@@ -1,8 +1,8 @@
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 import React from 'https://dev.jspm.io/react@16.13.1'
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
-import { Application, Router } from 'https://deno.land/x/oak@v4.0.0/mod.ts'
-import { renderComponents, createLayout, Layout, renderHtml } from './layout.tsx'
+import { Application, Router } from 'https://deno.land/x/oak@v5.1.0/mod.ts'
+import { renderComponents, Layout, renderHtml } from './layout.tsx'
 
 export { React }
 
@@ -11,18 +11,21 @@ type Option = {
 }
 
 type Dependencies = {
+  application?: Application
   router?: Router
   layout?: Layout
   renderer?: (args: renderComponents) => string
 }
 
 export class DexrApp {
+  readonly #application: Application
   readonly #router: Router
   readonly #renderer: (args: renderComponents) => string
   #layout: Layout
   #isStart: boolean = false
 
   constructor(dependencies?: Dependencies) {
+    this.#application = dependencies?.application ?? new Application()
     this.#router = dependencies?.router ?? new Router()
     this.#layout = dependencies?.layout ?? new Layout()
     this.#renderer = dependencies?.renderer ?? renderHtml
@@ -61,10 +64,8 @@ export class DexrApp {
       port = 8000,
     } = option || {}
 
-    const app = new Application()
-    app.use(this.#router.routes())
-
-    app.listen({ port })
+    this.#application.use(this.#router.routes())
+    this.#application.listen({ port })
     this.#isStart = true
     console.log(`serve: http://localhost:${ port }/`)
   }
