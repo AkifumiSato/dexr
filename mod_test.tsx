@@ -90,12 +90,14 @@ Deno.test('useLayout, addPage logic', () => {
 Deno.test('run logic', async () => {
   const application = new Application({ serve })
   const router = new Router()
-  // const spyUse = spy(application, 'use')
+  const spyUse = spy(application, 'use')
   const spyListen = spy(application, 'listen')
 
-  // const dexr = new DexrApp({ application, router })
   const dexr = new DexrApp({ application, router })
   await dexr.run()
+
+  assertEquals(spyUse.calls.length, 1)
+  assertStrictEq(spyUse.calls[0].args[0].router, router)
 
   assertEquals(spyListen.calls.length, 1)
   assertEquals(spyListen.calls[0].args[0], {
