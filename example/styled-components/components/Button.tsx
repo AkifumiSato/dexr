@@ -18,6 +18,4 @@ type Props = {
 
 const Button: React.FC<Props> = ({ onClick, children }) => <MyButton onClick={ onClick }>{ children }</MyButton>
 
-// const Button: React.FC<Props> = ({ onClick, children }) => <button onClick={ onClick }>{ children }</button>
-
 export default Button

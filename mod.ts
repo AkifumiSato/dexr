@@ -51,15 +51,14 @@ export class DexrApp {
 
     const [, script] = await Deno.compile(fullPath)
     Object.entries(script).forEach(([key, source]) => {
-      this.#compiledModule.set(key.replace(`file://${Deno.cwd()}`, ''), source)
+      this.#compiledModule.set(key.replace(`file://${ Deno.cwd() }`, ''), source)
     })
 
-    const jsPath = componentPath.replace('.tsx', '.js')
     this.#router.get(route, (context) => {
       context.response.headers = new Headers({
         'content-type': 'text/html; charset=UTF-8',
       })
-      context.response.body = this.#renderer({ App, layout: this.#layout, componentPath: jsPath })
+      context.response.body = this.#renderer({ App, layout: this.#layout, componentPath })
     })
   }
 
@@ -69,20 +68,16 @@ export class DexrApp {
   async run(option?: Option) {
     if (this.#isStart) throw new Error('Dexr is already run!!!')
 
+    // sync deno's import/client import
     for (const [key, source] of this.#compiledModule.entries()) {
-      this.#router.get(key, (context) => {
-        context.response.headers = new Headers({
-          'content-type': 'text/javascript; charset=UTF-8',
+      if (!key.includes('.js.map')) {
+        this.#router.get(key.replace('.js', '.tsx'), (context) => {
+          context.response.headers = new Headers({
+            'content-type': 'text/javascript; charset=UTF-8',
+          })
+          context.response.body = source
         })
-        context.response.body = source
-      })
-
-      this.#router.get(key.replace('.js', '.tsx'), (context) => {
-        context.response.headers = new Headers({
-          'content-type': 'text/javascript; charset=UTF-8',
-        })
-        context.response.body = source
-      })
+      }
     }
 
     const {
