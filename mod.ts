@@ -10,20 +10,22 @@ type Option = {
   port?: number
 }
 
+type Dependencies = {
+  router?: Router
+  layout?: Layout
+  renderer?: (args: renderComponents) => string
+}
+
 export class DexrApp {
   readonly #router: Router
   readonly #renderer: (args: renderComponents) => string
   #layout: Layout
   #isStart: boolean = false
 
-  constructor(
-    router: Router = new Router,
-    layout: Layout = createLayout(),
-    renderer: (args: renderComponents) => string = renderHtml
-  ) {
-    this.#router = router
-    this.#layout = layout
-    this.#renderer = renderer
+  constructor(dependencies?: Dependencies) {
+    this.#router = dependencies?.router ?? new Router()
+    this.#layout = dependencies?.layout ?? new Layout()
+    this.#renderer = dependencies?.renderer ?? renderHtml
   }
 
   /**

@@ -13,41 +13,37 @@ type Context = {
   }
 }
 
-class MockRouterManager {
-  router: Router
-  getSpy: Spy<Router>
-  dummyLayout: Layout
+class RenderHtmlStack {
   lastUseLayout?: Layout
-  spyRenderHtml: (args: renderComponents) => string
-  readonly renderHtmlResult: string = `<p>render success</p>`
+  callback: (args: renderComponents) => string
+  readonly dummyResult: string = `<p>render success</p>`
 
   constructor() {
-    this.router = new Router()
-    this.getSpy = spy(this.router, 'get')
-    this.dummyLayout = new Layout()
-    this.spyRenderHtml = spy((args: renderComponents) => {
+    this.callback = spy((args: renderComponents) => {
       this.lastUseLayout = args.layout
-      return this.renderHtmlResult
+      return this.dummyResult
     })
-  }
-
-  restoreAll() {
-    this.getSpy.restore()
   }
 }
 
 Deno.test('useLayout, addPage logic', () => {
-  const mockRouterManager = new MockRouterManager()
+  const renderHtmlStack = new RenderHtmlStack()
+  const router = new Router()
+  const routerGetSpy = spy(router, 'get')
+  const dummyLayout = new Layout()
 
-  const dexr = new DexrApp(mockRouterManager.router, undefined, mockRouterManager.spyRenderHtml)
+  const dexr = new DexrApp({
+    router: router,
+    renderer: renderHtmlStack.callback,
+  })
   dexr
-    .useLayout(mockRouterManager.dummyLayout)
+    .useLayout(dummyLayout)
     .addPage('test', () => <p>App</p>)
 
-  assertEquals(mockRouterManager.getSpy.calls.length, 1)
+  assertEquals(routerGetSpy.calls.length, 1)
 
-  const { args, self } = mockRouterManager.getSpy.calls[0]
-  assertEquals(self, mockRouterManager.router)
+  const { args, self } = routerGetSpy.calls[0]
+  assertEquals(self, router)
 
   const [route, handler] = args
   assertEquals(route, 'test')
@@ -56,8 +52,8 @@ Deno.test('useLayout, addPage logic', () => {
     response: {}
   }
   handler(dummyContext)
-  assertEquals(dummyContext.response.body, mockRouterManager.renderHtmlResult)
-  assertStrictEq(mockRouterManager.lastUseLayout, mockRouterManager.dummyLayout)
+  assertEquals(dummyContext.response.body, renderHtmlStack.dummyResult)
+  assertStrictEq(renderHtmlStack.lastUseLayout, dummyLayout)
 
-  mockRouterManager.restoreAll()
+  routerGetSpy.restore()
 })
