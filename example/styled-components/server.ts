@@ -5,6 +5,6 @@ import Head from './Head.tsx'
 const layout = createLayout()
   .addHead(Head)
 
-const dexr = await createDexr().useLayout(layout)
+const dexr = createDexr().useLayout(layout)
 await dexr.addPage('/', '/App.tsx')
-dexr.run()
+await dexr.run()

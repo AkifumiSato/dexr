@@ -8,9 +8,9 @@ Small application framework on the React.
 ```typescript
 import { createDexr } from '../mod.ts'
 
-const dexr = await createDexr()
+const dexr = createDexr()
 await dexr.addPage('/', '/App.tsx')
-dexr.run()
+await dexr.run()
 ```
 
 ## Use custom head
@@ -19,10 +19,9 @@ import { createLayout } from '../../layout.tsx'
 import { createDexr } from '../../mod.ts'
 import Head from './Head.tsx'
 
-const layout = createLayout()
-  .addHead(Head)
+const layout = createLayout().addHead(Head)
 
-const dexr = await createDexr().useLayout(layout)
+const dexr = createDexr().useLayout(layout)
 await dexr.addPage('/', '/App.tsx')
-dexr.run()
+await dexr.run()
 ```
