@@ -23,6 +23,7 @@ export class DexrApp {
   readonly #renderer: (args: renderComponents) => string
   #layout: Layout
   #isStart: boolean = false
+  #compiledModule: Map<string, string> = new Map()
 
   constructor(dependencies?: Dependencies) {
     this.#application = dependencies?.application ?? new Application()
@@ -44,14 +45,22 @@ export class DexrApp {
    * Register route with given route.
    * It will response with render html embed App Component.
    **/
-  addPage(route: string, App: React.FC): this {
+  async addPage(route: string, componentPath: string) {
+    const fullPath = Deno.cwd() + componentPath
+    const App = (await import(fullPath)).default
+
+    const [, script] = await Deno.compile(fullPath)
+    Object.entries(script).forEach(([key, source]) => {
+      this.#compiledModule.set(key.replace(`file://${Deno.cwd()}`, ''), source)
+    })
+
+    const jsPath = componentPath.replace('.tsx', '.js')
     this.#router.get(route, (context) => {
       context.response.headers = new Headers({
         'content-type': 'text/html; charset=UTF-8',
       })
-      context.response.body = this.#renderer({ App, layout: this.#layout })
+      context.response.body = this.#renderer({ App, layout: this.#layout, componentPath: jsPath })
     })
-    return this
   }
 
   /**
@@ -59,6 +68,22 @@ export class DexrApp {
    **/
   async run(option?: Option) {
     if (this.#isStart) throw new Error('Dexr is already run!!!')
+
+    for (const [key, source] of this.#compiledModule.entries()) {
+      this.#router.get(key, (context) => {
+        context.response.headers = new Headers({
+          'content-type': 'text/javascript; charset=UTF-8',
+        })
+        context.response.body = source
+      })
+
+      this.#router.get(key.replace('.js', '.tsx'), (context) => {
+        context.response.headers = new Headers({
+          'content-type': 'text/javascript; charset=UTF-8',
+        })
+        context.response.body = source
+      })
+    }
 
     const {
       port = 8000,

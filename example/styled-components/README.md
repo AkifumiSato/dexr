@@ -1,4 +1,4 @@
-# Simple Example
+# Styled components Example
 
 ## env
 * deno: v1.0.3 

@@ -7,9 +7,10 @@ const DefaultHead: React.FC = () => <title>Hello, world</title>
 export type renderComponents = {
   layout: Layout
   App: React.FC
+  componentPath: string
 }
 
-export const renderHtml = ({ layout, App }: renderComponents) => {
+export const renderHtml = ({ layout, App, componentPath }: renderComponents) => {
   const Head = layout.head
 
   return `<html lang="ja">
@@ -23,7 +24,8 @@ export const renderHtml = ({ layout, App }: renderComponents) => {
     <script type="module">
       import React from 'https://dev.jspm.io/react@16.13.1'
       import ReactDOM from 'https://dev.jspm.io/react-dom@16.13.1'
-      const App = ${ App }
+      import App from '${ componentPath }'
+  
       ReactDOM.hydrate(React.createElement(App), document.getElementById('root'))
     </script>
   </html>`
