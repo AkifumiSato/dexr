@@ -1,4 +1,4 @@
-import { React } from '../mod.ts'
+import { React } from '../../mod.ts'
 
 const App: React.FC = () => {
   const [count, setCount] = React.useState(0)
