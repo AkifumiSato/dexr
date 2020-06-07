@@ -16,10 +16,19 @@ type Context = {
 class MockRouterManager {
   router: Router
   getSpy: Spy<Router>
+  dummyLayout: Layout
+  lastUseLayout?: Layout
+  spyRenderHtml: (args: renderComponents) => string
+  readonly renderHtmlResult: string = `<p>render success</p>`
 
   constructor() {
     this.router = new Router()
     this.getSpy = spy(this.router, 'get')
+    this.dummyLayout = new Layout()
+    this.spyRenderHtml = spy((args: renderComponents) => {
+      this.lastUseLayout = args.layout
+      return this.renderHtmlResult
+    })
   }
 
   restoreAll() {
@@ -29,17 +38,10 @@ class MockRouterManager {
 
 Deno.test('useLayout, addPage logic', () => {
   const mockRouterManager = new MockRouterManager()
-  const renderHtmlResult = `<p>render success</p>`
-  let layoutOnRender: Layout | null = null
-  const dummyLayout = new Layout()
-  const spyRenderHtml = spy((args: renderComponents) => {
-    layoutOnRender = args.layout
-    return renderHtmlResult
-  })
 
-  const dexr = new DexrApp(mockRouterManager.router, undefined, spyRenderHtml)
+  const dexr = new DexrApp(mockRouterManager.router, undefined, mockRouterManager.spyRenderHtml)
   dexr
-    .useLayout(dummyLayout)
+    .useLayout(mockRouterManager.dummyLayout)
     .addPage('test', () => <p>App</p>)
 
   assertEquals(mockRouterManager.getSpy.calls.length, 1)
@@ -54,9 +56,8 @@ Deno.test('useLayout, addPage logic', () => {
     response: {}
   }
   handler(dummyContext)
-  assertEquals(dummyContext.response.body, renderHtmlResult)
-
-  assertStrictEq(layoutOnRender, dummyLayout)
+  assertEquals(dummyContext.response.body, mockRouterManager.renderHtmlResult)
+  assertStrictEq(mockRouterManager.lastUseLayout, mockRouterManager.dummyLayout)
 
   mockRouterManager.restoreAll()
 })

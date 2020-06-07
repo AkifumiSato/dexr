@@ -64,7 +64,7 @@ export class DexrApp {
 
     app.listen({ port })
     this.#isStart = true
-    console.log('serve: http://localhost:8000/')
+    console.log(`serve: http://localhost:${ port }/`)
   }
 }
 
