@@ -4,12 +4,12 @@ import ReactDOMServer from 'https://dev.jspm.io/react-dom@16.13.1/server'
 
 const DefaultHead: React.FC = () => <title>Hello, world</title>
 
-type Components = {
+export type renderComponents = {
   layout: Layout
   App: React.FC
 }
 
-export const renderHtml = ({ layout, App }: Components) => {
+export const renderHtml = ({ layout, App }: renderComponents) => {
   const Head = layout.head
 
   return `<html lang="ja">
