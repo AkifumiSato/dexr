@@ -3,22 +3,29 @@ Small application framework on the React.
 
 ## env
 * deno: v1.0.3 
-* denon: v2.0.2
 
-## dependencies
-* React
-* oak
+## Run
+```typescript
+import { createDexr } from '../mod.ts'
+import App from './App.tsx'
 
-## command
-### run dev
-deno
-```
-cd example
-deno run --allow-net --allow-read server.tsx
+await createDexr()
+  .addPage('/', App)
+  .run()
 ```
 
-denon
-```
-cd example
-denon start
+## Use custom head
+```typescript
+import { createLayout } from '../layout.tsx'
+import { createDexr } from '../mod.ts'
+import App from './App.tsx'
+import Head from './Head.tsx'
+
+const layout = createLayout()
+  .addHead(Head)
+
+await createDexr()
+  .useLayout(layout)
+  .addPage('/', App)
+  .run()
 ```
