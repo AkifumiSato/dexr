@@ -10,25 +10,40 @@ export type renderComponents = {
   componentPath: string
 }
 
+type Template = {
+  head: string
+  contents: string
+  componentPath: string
+}
+
+const template = ({head, contents, componentPath}: Template) => `<html lang="ja">
+  <head>
+    ${ head }
+    <style>* { font-family: Helvetica; }</style>
+  </head>
+  <body>
+    <div id="root">${ contents }</div>
+  </body>
+  <script type="module">
+    import React from 'https://dev.jspm.io/react@16.13.1'
+    import ReactDOM from 'https://dev.jspm.io/react-dom@16.13.1'
+    import App from '${ componentPath }'
+
+    ReactDOM.hydrate(React.createElement(App), document.getElementById('root'))
+  </script>
+</html>`
+
 export const renderHtml = ({ layout, App, componentPath }: renderComponents) => {
   const Head = layout.head
 
-  return `<html lang="ja">
-    <head>
-      ${ ReactDOMServer.renderToStaticMarkup(<Head />) }
-      <style>* { font-family: Helvetica; }</style>
-    </head>
-    <body>
-      <div id="root">${ ReactDOMServer.renderToString(<App />) }</div>
-    </body>
-    <script type="module">
-      import React from 'https://dev.jspm.io/react@16.13.1'
-      import ReactDOM from 'https://dev.jspm.io/react-dom@16.13.1'
-      import App from '${ componentPath }'
-  
-      ReactDOM.hydrate(React.createElement(App), document.getElementById('root'))
-    </script>
-  </html>`
+  const head = ReactDOMServer.renderToStaticMarkup(<Head />)
+  const contents = ReactDOMServer.renderToString(<App />)
+
+  return template({
+    head,
+    contents,
+    componentPath,
+  })
 }
 
 export class Layout {
