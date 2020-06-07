@@ -5,6 +5,35 @@ import { spy } from 'https://raw.githubusercontent.com/udibo/mock/v0.3.0/spy.ts'
 import { Layout, renderComponents } from './layout.tsx'
 import { DexrApp } from './mod.ts'
 import { Router } from 'https://deno.land/x/oak@v5.1.0/router.ts'
+import { Application, ListenOptions } from 'https://deno.land/x/oak@v5.1.0/application.ts'
+import {
+  serve as denoServe,
+  Server,
+  ServerRequest,
+} from 'https://deno.land/x/oak@v5.1.0/deps.ts'
+
+let serverRequestStack: ServerRequest[] = []
+
+const teardown = () => {
+  serverRequestStack = []
+}
+
+class MockServer {
+  close(): void {
+  }
+
+  async* [Symbol.asyncIterator]() {
+    for await (const request of serverRequestStack) {
+      yield request
+    }
+  }
+}
+
+const serve: typeof denoServe = function (
+  addr: string | ListenOptions,
+): Server {
+  return new MockServer() as Server
+}
 
 type Context = {
   response: {
@@ -58,20 +87,20 @@ Deno.test('useLayout, addPage logic', () => {
   spyRouterGet.restore()
 })
 
-// issue https://github.com/oakserver/oak/issues/153
-//
-// Deno.test('run logic', async () => {
-//   const application = new Application()
-//   const router = new Router()
-//   // const spyUse = spy(application, 'use')
-//   const spyListen = spy(application, 'listen')
-//
-//   // const dexr = new DexrApp({ application, router })
-//   const dexr = new DexrApp({ application, router })
-//   await dexr.run()
-//
-//   assertEquals(spyListen.calls.length, 1)
-//   assertEquals(spyListen.calls[0].args[0], {
-//     port: 8000,
-//   })
-// })
+Deno.test('run logic', async () => {
+  const application = new Application({ serve })
+  const router = new Router()
+  // const spyUse = spy(application, 'use')
+  const spyListen = spy(application, 'listen')
+
+  // const dexr = new DexrApp({ application, router })
+  const dexr = new DexrApp({ application, router })
+  await dexr.run()
+
+  assertEquals(spyListen.calls.length, 1)
+  assertEquals(spyListen.calls[0].args[0], {
+    port: 8000,
+  })
+
+  teardown()
+})
