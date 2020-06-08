@@ -16,7 +16,7 @@ type Template = {
   componentPath: string
 }
 
-const template = ({head, contents, componentPath}: Template) => `<html lang="ja">
+export const template = ({head, contents, componentPath}: Template) => `<html lang="ja">
   <head>
     ${ head }
     <style>* { font-family: Helvetica; }</style>

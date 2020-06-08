@@ -21,7 +21,7 @@ type Dependencies = {
 export class DexrApp {
   readonly #application: Application
   readonly #router: Router
-  readonly #renderer: (args: renderComponents) => string
+  #renderer: (args: renderComponents) => string
   #layout: Layout
   #isStart: boolean = false
   #compiledModule: Map<string, string> = new Map()
@@ -31,6 +31,15 @@ export class DexrApp {
     this.#router = dependencies?.router ?? new Router()
     this.#layout = dependencies?.layout ?? new Layout()
     this.#renderer = dependencies?.renderer ?? renderHtml
+  }
+
+  /**
+   * Register Renderer
+   **/
+  useRenderer(renderer: (args: renderComponents) => string) {
+    this.#renderer = renderer
+
+    return this
   }
 
   /**
@@ -90,7 +99,7 @@ export class DexrApp {
     this.#application.listen({ port })
     this.#isStart = true
     console.log(`serve: http://localhost:${ port }/`)
-        }
   }
+}
 
-  export const createDexr = () => new DexrApp()
+export const createDexr = () => new DexrApp()
