@@ -2,6 +2,7 @@
 import React from 'https://dev.jspm.io/react@16.13.1'
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 import { Application, Router } from 'https://deno.land/x/oak@v5.1.0/mod.ts'
+import { join, fromFileUrl } from 'https://deno.land/std/path/mod.ts'
 import { renderComponents, Layout, renderHtml } from './layout.tsx'
 
 export { React }
@@ -46,12 +47,13 @@ export class DexrApp {
    * It will response with render html embed App Component.
    **/
   async addPage(route: string, componentPath: string) {
-    const fullPath = Deno.cwd() + componentPath
+    const fullPath = join(Deno.cwd(), componentPath)
     const App = (await import(fullPath)).default
 
     const [, script] = await Deno.compile(fullPath)
     Object.entries(script).forEach(([key, source]) => {
-      this.#compiledModule.set(key.replace(`file://${ Deno.cwd() }`, ''), source)
+      const filePath = fromFileUrl(key).replace(Deno.cwd(), '')
+      this.#compiledModule.set(filePath, source)
     })
 
     this.#router.get(route, (context) => {
@@ -88,7 +90,7 @@ export class DexrApp {
     this.#application.listen({ port })
     this.#isStart = true
     console.log(`serve: http://localhost:${ port }/`)
+        }
   }
-}
 
-export const createDexr = () => new DexrApp()
+  export const createDexr = () => new DexrApp()
