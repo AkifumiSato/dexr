@@ -6,7 +6,7 @@ Small application framework on the React.
 
 ## Run
 ```typescript
-import { createDexr } from '../mod.ts'
+import { createDexr } from '../../mod.ts'
 
 const dexr = createDexr()
 await dexr.addPage('/', '/App.tsx')
@@ -15,13 +15,13 @@ await dexr.run()
 
 ## Use custom head
 ```typescript
-import { createLayout } from '../../layout.tsx'
+import { createRenderer } from '../../renderer.tsx'
 import { createDexr } from '../../mod.ts'
 import Head from './Head.tsx'
 
-const layout = createLayout().addHead(Head)
+const renderer = createRenderer().useHead(Head)
 
-const dexr = createDexr().useLayout(layout)
+const dexr = createDexr().useRenderer(renderer)
 await dexr.addPage('/', '/App.tsx')
 await dexr.run()
 ```

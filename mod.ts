@@ -3,7 +3,7 @@ import React from 'https://dev.jspm.io/react@16.13.1'
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 import { Application, Router } from 'https://deno.land/x/oak@v5.1.0/mod.ts'
 import { join, fromFileUrl } from 'https://deno.land/std/path/mod.ts'
-import { Layout, render, AppParts } from './layout.tsx'
+import { Renderer, createRenderer } from './renderer.tsx'
 
 export { React }
 
@@ -14,39 +14,27 @@ type Option = {
 type Dependencies = {
   application?: Application
   router?: Router
-  layout?: Layout
-  render?: (layout: Layout, renderParts: AppParts) => string
+  renderer?: Renderer
 }
 
 export class DexrApp {
   readonly #application: Application
   readonly #router: Router
-  #render: (layout: Layout, renderParts: AppParts) => string
-  #layout: Layout
+  #renderer: Renderer
   #isStart: boolean = false
   #compiledModule: Map<string, string> = new Map()
 
   constructor(dependencies?: Dependencies) {
     this.#application = dependencies?.application ?? new Application()
     this.#router = dependencies?.router ?? new Router()
-    this.#layout = dependencies?.layout ?? new Layout()
-    this.#render = dependencies?.render ?? render
+    this.#renderer = dependencies?.renderer ?? createRenderer()
   }
 
-
-  /**
-   * Register Layout with given layout.
-   **/
-  useLayout(layout: Layout): this {
-    this.#layout = layout
-
+  useRenderer(layout: Renderer): this {
+    this.#renderer = layout
     return this
   }
 
-  /**
-   * Register route with given route.
-   * It will response with render html embed App Component.
-   **/
   async addPage(route: string, componentPath: string) {
     const fullPath = join(Deno.cwd(), componentPath)
     const App = (await import(fullPath)).default
@@ -61,13 +49,10 @@ export class DexrApp {
       context.response.headers = new Headers({
         'content-type': 'text/html; charset=UTF-8',
       })
-      context.response.body = this.#render(this.#layout, { App, componentPath })
+      context.response.body = this.#renderer.render(App, componentPath)
     })
   }
 
-  /**
-   * Start SSR Server.
-   **/
   async run(option?: Option) {
     if (this.#isStart) throw new Error('Dexr is already run!!!')
 
