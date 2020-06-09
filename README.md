@@ -1,8 +1,8 @@
 # Dexr
-Small application framework on the React.
+Small Server Side Rendering library on Deno.
 
-## env
-* deno: v1.0.3 
+## engines
+* deno: v1.0.3^ 
 
 ## Run
 ```typescript
