@@ -4,19 +4,13 @@ import ReactDOMServer from 'https://dev.jspm.io/react-dom@16.13.1/server'
 
 const DefaultHead: React.FC = () => <title>Hello, world</title>
 
-export type renderComponents = {
-  layout: Layout
-  App: React.FC
-  componentPath: string
-}
-
 type Template = {
   head: string
   contents: string
   componentPath: string
 }
 
-export const template = ({head, contents, componentPath}: Template) => `<html lang="ja">
+export const template = ({ head, contents, componentPath }: Template) => `<html lang="ja">
   <head>
     ${ head }
     <style>* { font-family: Helvetica; }</style>
@@ -33,21 +27,35 @@ export const template = ({head, contents, componentPath}: Template) => `<html la
   </script>
 </html>`
 
-export const renderHtml = ({ layout, App, componentPath }: renderComponents) => {
-  const Head = layout.head
+export type RenderParts = { Head: React.FC } & AppParts
 
+export type MapRenderComponent = (renderParts: RenderParts) => Template
+
+export const mapRenderComponent: MapRenderComponent = (renderParts) => {
+  const { Head, App, componentPath } = renderParts
   const head = ReactDOMServer.renderToStaticMarkup(<Head />)
   const contents = ReactDOMServer.renderToString(<App />)
 
-  return template({
+  return {
     head,
     contents,
     componentPath,
-  })
+  }
 }
+
+export type AppParts = {
+  App: React.FC
+  componentPath: string
+}
+
+export const render = (layout: Layout, appParts: AppParts) => template(layout.mapRenderComponents({
+  ...appParts,
+  Head: layout.head
+}))
 
 export class Layout {
   head: React.FC = DefaultHead
+  mapRenderComponents: MapRenderComponent = mapRenderComponent
 
   /**
    * Register head contents.

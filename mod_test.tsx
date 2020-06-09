@@ -2,7 +2,7 @@
 import React from 'https://dev.jspm.io/react@16.13.1'
 import { assertEquals, assertStrictEq } from 'https://deno.land/std@0.55.0/testing/asserts.ts'
 import { spy } from 'https://raw.githubusercontent.com/udibo/mock/v0.3.0/spy.ts'
-import { Layout, renderComponents } from './layout.tsx'
+import { Layout, AppParts } from './layout.tsx'
 import { DexrApp } from './mod.ts'
 import { Router } from 'https://deno.land/x/oak@v5.1.0/router.ts'
 import { Application, ListenOptions } from 'https://deno.land/x/oak@v5.1.0/application.ts'
@@ -44,18 +44,18 @@ type Context = {
 
 class RenderHtmlStack {
   lastUseLayout?: Layout
-  callback: (args: renderComponents) => string
+  callback: (layout: Layout, appParts: AppParts) => string
   readonly dummyResult: string = `<p>render success</p>`
 
   constructor() {
-    this.callback = spy((args: renderComponents) => {
-      this.lastUseLayout = args.layout
+    this.callback = spy((layout: Layout, appParts: AppParts) => {
+      this.lastUseLayout = layout
       return this.dummyResult
     })
   }
 }
 
-Deno.test('useLayout, addPage logic', () => {
+Deno.test('useLayout, addPage logic', async () => {
   const renderHtmlStack = new RenderHtmlStack()
   const router = new Router()
   const spyRouterGet = spy(router, 'get')
@@ -63,11 +63,11 @@ Deno.test('useLayout, addPage logic', () => {
 
   const dexr = new DexrApp({
     router: router,
-    renderer: renderHtmlStack.callback,
+    render: renderHtmlStack.callback,
   })
-  dexr
+  await dexr
     .useLayout(dummyLayout)
-    .addPage('test', () => <p>App</p>)
+    .addPage('test', '/example/hello-world/App.tsx')
 
   assertEquals(spyRouterGet.calls.length, 1)
 

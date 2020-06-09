@@ -3,7 +3,7 @@ import React from 'https://dev.jspm.io/react@16.13.1'
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 import { Application, Router } from 'https://deno.land/x/oak@v5.1.0/mod.ts'
 import { join, fromFileUrl } from 'https://deno.land/std/path/mod.ts'
-import { renderComponents, Layout, renderHtml } from './layout.tsx'
+import { Layout, render, AppParts } from './layout.tsx'
 
 export { React }
 
@@ -15,13 +15,13 @@ type Dependencies = {
   application?: Application
   router?: Router
   layout?: Layout
-  renderer?: (args: renderComponents) => string
+  render?: (layout: Layout, renderParts: AppParts) => string
 }
 
 export class DexrApp {
   readonly #application: Application
   readonly #router: Router
-  #renderer: (args: renderComponents) => string
+  #render: (layout: Layout, renderParts: AppParts) => string
   #layout: Layout
   #isStart: boolean = false
   #compiledModule: Map<string, string> = new Map()
@@ -30,17 +30,9 @@ export class DexrApp {
     this.#application = dependencies?.application ?? new Application()
     this.#router = dependencies?.router ?? new Router()
     this.#layout = dependencies?.layout ?? new Layout()
-    this.#renderer = dependencies?.renderer ?? renderHtml
+    this.#render = dependencies?.render ?? render
   }
 
-  /**
-   * Register Renderer
-   **/
-  useRenderer(renderer: (args: renderComponents) => string) {
-    this.#renderer = renderer
-
-    return this
-  }
 
   /**
    * Register Layout with given layout.
@@ -69,7 +61,7 @@ export class DexrApp {
       context.response.headers = new Headers({
         'content-type': 'text/html; charset=UTF-8',
       })
-      context.response.body = this.#renderer({ App, layout: this.#layout, componentPath })
+      context.response.body = this.#render(this.#layout, { App, componentPath })
     })
   }
 
