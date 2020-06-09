@@ -20,14 +20,13 @@ type Dependencies = {
 export class DexrApp {
   readonly #application: Application
   readonly #router: Router
-  #renderer: Renderer
+  #renderer: Renderer = createRenderer()
   #isStart: boolean = false
   #compiledModule: Map<string, string> = new Map()
 
   constructor(dependencies?: Dependencies) {
     this.#application = dependencies?.application ?? new Application()
     this.#router = dependencies?.router ?? new Router()
-    this.#renderer = dependencies?.renderer ?? createRenderer()
   }
 
   useRenderer(layout: Renderer): this {
