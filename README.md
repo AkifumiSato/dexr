@@ -6,7 +6,7 @@ Small Server Side Rendering library on Deno.
 
 ## Run
 ```typescript
-import { createDexr } from '../../mod.ts'
+import { createDexr } from 'https://raw.githubusercontent.com/AkifumiSato/dexr/master/mod.ts'
 
 const dexr = createDexr()
 await dexr.addPage('/', '/App.tsx')
@@ -15,8 +15,8 @@ await dexr.run()
 
 ## Use custom head
 ```typescript
-import { createRenderer } from '../../renderer.tsx'
-import { createDexr } from '../../mod.ts'
+import { createRenderer } from 'https://raw.githubusercontent.com/AkifumiSato/dexr/master/renderer.tsx'
+import { createDexr } from 'https://raw.githubusercontent.com/AkifumiSato/dexr/master/mod.ts'
 import Head from './Head.tsx'
 
 const renderer = createRenderer().useHead(Head)
