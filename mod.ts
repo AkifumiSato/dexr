@@ -36,7 +36,7 @@ export class DexrApp {
 
   async addPage(route: string, componentPath: string) {
     const fullPath = join(Deno.cwd(), componentPath)
-    const App = (await import(fullPath)).default
+    const App = (await import(`file://${ fullPath }`)).default
 
     const [, script] = await Deno.compile(fullPath)
     Object.entries(script).forEach(([key, source]) => {
