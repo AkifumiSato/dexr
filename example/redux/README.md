@@ -1,4 +1,4 @@
-# Styled components Example
+# Redux Example
 
 ## env
 * deno: v1.0.3^ 

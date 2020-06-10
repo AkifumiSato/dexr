@@ -64,6 +64,12 @@ export class DexrApp {
           })
           context.response.body = source
         })
+        this.#router.get(key.replace('.js', '.ts'), (context) => {
+          context.response.headers = new Headers({
+            'content-type': 'text/javascript; charset=UTF-8',
+          })
+          context.response.body = source
+        })
       }
     }
 
