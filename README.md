@@ -34,7 +34,7 @@ const renderer = createRenderer()
 const dexr = createDexr().useRenderer(renderer)
 ```
 
-#### async addPage(route: string, componentPath: string): Promise<void>
+#### .addPage(route: string, componentPath: string): Promise<void>
 Register the route and app component path.
 ```typescript
 import { createDexr } from 'https://deno.land/x/dexr/mod.ts'
@@ -43,7 +43,7 @@ const dexr = createDexr()
 await dexr.addPage('/', '/App.tsx')
 ```
 
-#### async run(option?: Option): Promise<void>
+#### .run(option?: Option): Promise<void>
 Run Dexr application.
 ```typescript
 import { createDexr } from 'https://deno.land/x/dexr/mod.ts'
@@ -71,7 +71,7 @@ import Head from './Head.tsx'
 const renderer = createRenderer().useHead(Head)
 ```
 
-#### useRenderComponents(enhance: RenderComponents): Renderer
+#### .useRenderComponents(enhance: RenderComponents): Renderer
 Register callback on components render.
 ```typescript
 import React from 'https://dev.jspm.io/react@16.13.1'
@@ -87,7 +87,7 @@ const renderComponents: RenderComponents = ({ Head, App }) => {
 const renderer = createRenderer().useRenderComponents(renderComponents)
 ```
 
-#### useTemplate(template: Template): Renderer
+#### .useTemplate(template: Template): Renderer
 Register callback on render template.
 ```typescript
 import { createRenderer, Template } from 'https://deno.land/x/dexr/renderer.tsx'
