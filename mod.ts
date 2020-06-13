@@ -5,8 +5,6 @@ import { Application, Router } from 'https://deno.land/x/oak@v5.1.0/mod.ts'
 import { join, fromFileUrl } from 'https://deno.land/std/path/mod.ts'
 import { Renderer, createRenderer } from './renderer.tsx'
 
-export { React }
-
 type Option = {
   port?: number
 }
