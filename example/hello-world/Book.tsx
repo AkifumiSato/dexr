@@ -3,11 +3,13 @@ import React from 'https://dev.jspm.io/react@16.13.1'
 
 export type Props = {
   id: string
+  foo: string
 }
 
-const Book: React.FC<Props> = ({ id }) => (
+const Book: React.FC<Props> = ({ id, foo }) => (
   <div>
-    The book id is { id }
+    The book id is { id }<br/><br/>
+    &foo is { foo }
   </div>
 )
 
