@@ -33,7 +33,7 @@ export class DexrApp {
     return this
   }
 
-  async addPage<T extends {}, U extends {}>(route: string, componentPath: string, renderProps?: (params: T) => U) {
+  async addPage<T extends {}, U extends {}, P extends {}>(route: string, componentPath: string, renderProps?: (params: T, query: U) => P) {
     const fullPath = join(Deno.cwd(), componentPath)
     const App = (await import(`file://${ fullPath }`)).default
 
@@ -47,8 +47,8 @@ export class DexrApp {
       context.response.headers = new Headers({
         'content-type': 'text/html; charset=UTF-8',
       })
-      const query = getQuery(context, { mergeParams: true }) as T
-      const appProps = renderProps ? renderProps(query) : undefined
+      const query = getQuery(context, { mergeParams: false }) as U
+      const appProps = renderProps ? renderProps(context.params as T, query) : undefined
       context.response.body = this.#renderer.render(App, componentPath, appProps)
     })
   }

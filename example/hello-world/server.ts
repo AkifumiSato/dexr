@@ -7,7 +7,8 @@ const renderer = createRenderer().useHead(Head)
 
 const dexr = createDexr().useRenderer(renderer)
 await dexr.addPage('/', './App.tsx')
-await dexr.addPage<{ id: string }, BookProps>('/book/:id', '/Book.tsx', (params) => ({
+await dexr.addPage<{ id: string }, { foo?: string }, BookProps>('/book/:id', '/Book.tsx', (params, query) => ({
   id: params.id,
+  foo: query.foo ?? '[default]',
 }))
 await dexr.run()
