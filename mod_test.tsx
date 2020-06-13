@@ -37,6 +37,11 @@ const serve: typeof denoServe = function (
 }
 
 type Context = {
+  request: {
+    url: {
+      searchParams: Array<[string, any]>
+    }
+  }
   response: {
     headers?: Headers
     body?: string
@@ -67,6 +72,11 @@ Deno.test('useRenderer, addPage logic', async () => {
   assertEquals(route, 'test')
 
   const dummyContext: Context = {
+    request: {
+      url: {
+        searchParams: []
+      }
+    },
     response: {}
   }
   handler(dummyContext)
