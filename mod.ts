@@ -4,6 +4,7 @@ import React from 'https://dev.jspm.io/react@16.13.1'
 import { Application, Router } from 'https://deno.land/x/oak@v5.1.0/mod.ts'
 import { join, fromFileUrl } from 'https://deno.land/std/path/mod.ts'
 import { Renderer, createRenderer } from './renderer.tsx'
+import { getQuery } from 'https://deno.land/x/oak@v5.1.0/helpers.ts'
 
 type Option = {
   port?: number
@@ -32,7 +33,7 @@ export class DexrApp {
     return this
   }
 
-  async addPage(route: string, componentPath: string) {
+  async addPage<T extends {}, U extends {}>(route: string, componentPath: string, renderProps?: (params: T) => U) {
     const fullPath = join(Deno.cwd(), componentPath)
     const App = (await import(`file://${ fullPath }`)).default
 
@@ -46,7 +47,9 @@ export class DexrApp {
       context.response.headers = new Headers({
         'content-type': 'text/html; charset=UTF-8',
       })
-      context.response.body = this.#renderer.render(App, componentPath)
+      const query = getQuery(context, { mergeParams: true }) as T
+      const appProps = renderProps ? renderProps(query) : undefined
+      context.response.body = this.#renderer.render(App, componentPath, appProps)
     })
   }
 
