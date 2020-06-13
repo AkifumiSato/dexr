@@ -43,6 +43,18 @@ const dexr = createDexr()
 await dexr.addPage('/', '/App.tsx')
 ```
 
+#### .addPage<T extends {}, U extends {}>(route: string, componentPath: string, renderProps?: (params: T) => U): Promise<void>
+Register the route and app component path.
+```typescript
+import { createDexr } from 'https://deno.land/x/dexr/mod.ts'
+import { Props as BookProps } from './Book.tsx'
+// --snip--
+const dexr = createDexr()
+await dexr.addPage<{ id: string }, BookProps>('/book/:id', '/Book.tsx', (params) => ({
+  id: params.id,
+}))
+```
+
 #### .run(option?: Option): Promise<void>
 Run Dexr application.
 ```typescript
