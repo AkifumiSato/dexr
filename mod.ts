@@ -33,7 +33,9 @@ export class DexrApp {
     return this
   }
 
-  async addPage<T extends {}, U extends {}, P extends {}>(route: string, componentPath: string, renderProps?: (params: T, query: U) => P) {
+  async addPage(route: string, componentPath: string): Promise<void>
+  async addPage<T extends {}, U extends {}, P extends {}>(route: string, componentPath: string, renderProps?: (params: T, query: U) => Promise<P>): Promise<void>
+  async addPage<T extends {}, U extends {}, P extends {}>(route: string, componentPath: string, renderProps?: (params: T, query: U) => Promise<P>) {
     const fullPath = join(Deno.cwd(), componentPath)
     const App = (await import(`file://${ fullPath }`)).default
 
@@ -43,12 +45,12 @@ export class DexrApp {
       this.#compiledModule.set(filePath, source)
     })
 
-    this.#router.get(route, (context) => {
+    this.#router.get(route, async (context) => {
       context.response.headers = new Headers({
         'content-type': 'text/html; charset=UTF-8',
       })
       const query = getQuery(context, { mergeParams: false }) as U
-      const appProps = renderProps ? renderProps(context.params as T, query) : undefined
+      const appProps = renderProps ? await renderProps(context.params as T, query) : undefined
       context.response.body = this.#renderer.render(App, componentPath, appProps)
     })
   }

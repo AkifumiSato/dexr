@@ -43,17 +43,34 @@ const dexr = createDexr()
 await dexr.addPage('/', '/App.tsx')
 ```
 
-#### .addPage<T extends {}, U extends {}, P extends {}>(route: string, componentPath: string, renderProps?: (params: T, query: U) => P): Promise<void>
+#### .addPage<T extends {}, U extends {}, P extends {}>(route: string, componentPath: string, renderProps?: (params: T, query: U) => Promise<P>): Promise<void>
 Register the route and app component path.
 ```typescript
+import { delay } from 'https://deno.land/std@0.57.0/async/delay.ts'
 import { createDexr } from 'https://deno.land/x/dexr/mod.ts'
 import { Props as BookProps } from './Book.tsx'
 // --snip--
 const dexr = createDexr()
-await dexr.addPage<{ id: string }, { foo?: string }, BookProps>('/book/:id', '/Book.tsx', (params, query) => ({
+await dexr.addPage<{ id: string }, { foo?: string }, BookProps>('/book/:id', '/Book.tsx', (params, query) => Promise.resolve({
   id: params.id,
   foo: query.foo ?? '[default]',
 }))
+
+type BookParams = {
+  id: string
+}
+
+type BookQuery = {
+  foo?: string
+}
+
+await dexr.addPage<BookParams, BookQuery, BookProps>('/book_async/:id', '/Book.tsx', async (params, query) => {
+  await delay(1000) // async callback
+  return {
+    id: params.id,
+    foo: query.foo ?? '[default]',
+  }
+})
 ```
 
 #### .run(option?: Option): Promise<void>
