@@ -2,7 +2,7 @@
 Small Server Side Rendering library on Deno.
 
 ## engines
-* deno: v1.0.3^ 
+* deno: v1.2.1^ 
 
 ## Basic usage
 ```typescript
