@@ -1,8 +1,8 @@
 # Simple Example
 
 ## env
-* deno: v1.0.3^ 
-* denon: v2.0.2^
+* deno: v1.2.1^ 
+* denon: v2.3.0^
 
 ## command
 ### run dev

@@ -1,4 +1,4 @@
-import { delay } from 'https://deno.land/std@0.57.0/async/delay.ts'
+import { delay } from 'https://deno.land/std@0.62.0/async/delay.ts'
 import { createRenderer } from '../../renderer.tsx'
 import { createDexr } from '../../mod.ts'
 import { Props as BookProps } from './Book.tsx'
