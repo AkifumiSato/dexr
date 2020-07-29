@@ -1,10 +1,10 @@
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
 import React from 'https://dev.jspm.io/react@16.13.1'
 // @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
-import { Application, Router } from 'https://deno.land/x/oak@v5.1.0/mod.ts'
-import { join, fromFileUrl } from 'https://deno.land/std/path/mod.ts'
+import { Application, Router } from 'https://deno.land/x/oak@v6.0.1/mod.ts'
+import { join, fromFileUrl } from 'https://deno.land/std@0.62.0/path/mod.ts'
 import { Renderer, createRenderer } from './renderer.tsx'
-import { getQuery } from 'https://deno.land/x/oak@v5.1.0/helpers.ts'
+import { getQuery } from 'https://deno.land/x/oak@v6.0.1/helpers.ts'
 
 type Option = {
   port?: number

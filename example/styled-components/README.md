@@ -1,7 +1,7 @@
 # Styled components Example
 
 ## env
-* deno: v1.0.3^ 
+* deno: v1.2.1^ 
 
 ## command
 ### run dev

@@ -5,13 +5,13 @@ import { spy } from 'https://raw.githubusercontent.com/udibo/mock/v0.3.0/spy.ts'
 import { stub } from 'https://raw.githubusercontent.com/udibo/mock/v0.3.0/stub.ts'
 import { Renderer } from './renderer.tsx'
 import { DexrApp } from './mod.ts'
-import { Router } from 'https://deno.land/x/oak@v5.1.0/router.ts'
-import { Application, ListenOptions } from 'https://deno.land/x/oak@v5.1.0/application.ts'
+import { Router } from 'https://deno.land/x/oak@v6.0.1//router.ts'
+import { Application, ListenOptions } from 'https://deno.land/x/oak@v6.0.1//application.ts'
 import {
-  serve as denoServe,
+  Serve,
   Server,
   ServerRequest,
-} from 'https://deno.land/x/oak@v5.1.0/deps.ts'
+} from 'https://deno.land/x/oak@v6.0.1/types.d.ts'
 
 let serverRequestStack: ServerRequest[] = []
 
@@ -30,7 +30,7 @@ class MockServer {
   }
 }
 
-const serve: typeof denoServe = function (
+const serve: Serve = function (
   addr: string | ListenOptions,
 ): Server {
   return new MockServer() as Server
