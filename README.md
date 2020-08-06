@@ -1,5 +1,5 @@
 # Dexr
-Small Server Side Rendering library on Deno.
+React SSR & hydrate library on Deno.
 
 ## engines
 * deno: v1.2.1^ 
