@@ -1,17 +1,12 @@
 # Simple Example
 
 ## env
-* deno: v1.2.1^ 
-* denon: v2.3.0^
+* deno: v1.7.0^
 
 ## command
 ### run dev
 deno
 ```
-deno run --allow-net --allow-read --unstable server.tsx
+deno run --allow-read --allow-net --allow-write --unstable generator.ts
 ```
 
-denon
-```
-denon start
-```

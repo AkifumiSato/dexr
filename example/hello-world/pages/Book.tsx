@@ -1,5 +1,5 @@
-// @deno-types="https://deno.land/x/types/react/v16.13.1/react.d.ts"
-import React from 'https://dev.jspm.io/react@16.13.1'
+import Layout from '../components/Layout.tsx'
+import { React } from "../../../deps.ts";
 
 export type Props = {
   id: string
@@ -7,10 +7,10 @@ export type Props = {
 }
 
 const Book: React.FC<Props> = ({ id, foo }) => (
-  <div>
+  <Layout>
     The book id is { id }<br/><br/>
     &foo is { foo }
-  </div>
+  </Layout>
 )
 
 export default Book
