@@ -12,6 +12,8 @@ export const generate = async <T extends {}>(
   const Page = (await import(`file://${fullPath}`)).default;
   const html = renderToString(<Page {...props} />);
   // todo hydrate script add
+  // todo Deno.emitでbundleがサポートされる計画があるかissueなどあさってみる、SWCでサポートしない限り難しいのかも
+
 
   // export
   await ensureDir(EXPORT_PATH);
